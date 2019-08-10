@@ -9,6 +9,8 @@
   padding: 20px;
   background-color: rgb(250, 250, 250);
   margin-bottom: 10px;
+  max-width: 90%;
+  min-width: 90%;
 }
 
 .todo-item > input {
@@ -28,13 +30,18 @@
 .todo-item > button {
   position: absolute;
   right: 10px;
-  padding: 18px;
+
   border-radius: 50%;
   display: none;
-  font-size: 2.2rem;
+  font-size: 2.5rem;
   font-weight: bolder;
+  padding: 1rem 2rem 1rem 2rem;
   background-image: radial-gradient(red, rgb(160, 52, 52));
 }
 .todo-item:hover > button {
   display: inherit;
+}
+.todo-item > div {
+  overflow: auto;
+  max-width: 80%;
 }

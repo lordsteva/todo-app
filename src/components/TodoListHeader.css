@@ -1,6 +1,6 @@
 .todo-list-header form,
 .todo-list-header input {
-  min-width: 80%;
+  min-width: 95%;
   font-size: inherit;
   max-width: inherit;
   margin: 10px;
@@ -9,7 +9,7 @@
 .todo-list-header {
   font-size: 3.3rem;
   margin-left: 50px;
-  max-width: 90%;
+  width: 90%;
   margin-top: 10px;
   /*min-width: 100%;*/
 }
