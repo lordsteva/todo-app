@@ -1,4 +1,5 @@
 import React from "react";
+import "./TodoListHeader.css";
 
 class TodoListHeader extends React.Component {
   state = { name: "" };
@@ -14,9 +15,10 @@ class TodoListHeader extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="todo-list-header">
         <form onSubmit={this.onFormSubmit}>
           <input
+            placeholder="TODO item caption"
             type="text"
             value={this.state.name}
             onChange={this.onInputChange}

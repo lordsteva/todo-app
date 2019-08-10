@@ -4,7 +4,9 @@ import TodoList from "./TodoList";
 class App extends Component {
   render() {
     return (
-      <div>
+      <div
+        style={{ minHeight: "100vh", backgroundColor: "rgb(235, 235, 235)" }}
+      >
         <TodoList />
       </div>
     );

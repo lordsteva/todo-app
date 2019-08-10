@@ -1,32 +1,60 @@
 import React from "react";
 import TodoListHeader from "./TodoListHeader";
 import TodoItem from "./TodoItem";
+
+import "./TodoList.css";
 class TodoList extends React.Component {
-  state = { items: [] };
+  state = { items: [], id: 1 };
 
   componentDidMount() {
-    let items = localStorage.getItem("items");
-    if (items) this.setState({ items: JSON.parse(items) });
+    const items = localStorage.getItem("items");
+    if (items) {
+      const id = localStorage.getItem("id");
+      this.setState({ id: id * 1, items: JSON.parse(items) });
+    }
   }
 
-  onFormSubmit = itemName => {
+  onItemDelete = itemID => {
     this.setState(oldState => {
-      //TODO item id
-      const newItem = { id: itemName, name: itemName };
-      const items = [].concat(oldState.items, newItem);
+      let items = [].concat(oldState.items);
+      items = items.filter(item => item.id !== itemID);
       localStorage.setItem("items", JSON.stringify(items));
       return { items };
     });
   };
 
-  render() {
-    console.log(this.state.items);
+  onFormSubmit = itemName => {
+    if (!itemName) return;
+    this.setState(oldState => {
+      const id = oldState.id;
+      localStorage.setItem("id", id + 1);
+      const newItem = { id, name: itemName, completed: false };
+      const items = [].concat(oldState.items, newItem);
+      localStorage.setItem("items", JSON.stringify(items));
+      return { id: id + 1, items };
+    });
+  };
 
+  onItemChecked = itemID => {
+    this.setState(oldState => {
+      const items = [].concat(oldState.items);
+      const item = items.find(item => item.id === itemID);
+      item.completed = !item.completed;
+      return { items };
+    });
+  };
+
+  render() {
     const items = this.state.items.map(item => (
-      <TodoItem key={item.id} name={item.name} />
+      <TodoItem
+        onItemDelete={this.onItemDelete}
+        key={item.id}
+        item={item}
+        onItemChecked={this.onItemChecked}
+      />
     ));
     return (
-      <div>
+      <div className="todo-list">
         <TodoListHeader
           onFormSubmit={this.onFormSubmit}
           items={this.state.items}
