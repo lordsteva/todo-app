@@ -1,23 +1,37 @@
-.todo-list-header form,
 .todo-list-header input {
-  min-width: 95%;
-  font-size: inherit;
-  max-width: inherit;
-  margin: 10px;
-  border-bottom: 1px gray solid;
-}
-.todo-list-header {
-  font-size: 3.3rem;
-  margin-left: 50px;
-  width: 90%;
-  margin-top: 10px;
-  /*min-width: 100%;*/
-}
-.todo-list-header input {
+  font-size: 1.6rem;
   border-radius: 20px;
   padding: 5px;
   padding-left: 10px;
 }
+
+.todo-list-header {
+  min-width: 95%;
+  border-bottom: 3px gray solid;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-self: baseline;
+  margin-top: 10px;
+  padding: 20px;
+  padding-left: 10px;
+}
+
+.todo-list-header > button {
+  margin-right: 10px;
+  padding: 0px;
+  border-radius: 50%;
+}
+
 ::placeholder {
   color: rgba(125, 125, 125, 0.25);
+}
+
+.todo-list-header > form {
+  flex: 1 1 auto;
+  display: flex;
+}
+.todo-list-header > form > input {
+  flex: 1 1 auto;
+  display: flex;
 }

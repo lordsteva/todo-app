@@ -1,47 +1,56 @@
 .todo-item {
-  flex: 1 1 1px;
+  flex: 1 1;
   display: flex;
-  position: relative;
   align-items: center;
+  justify-content: space-between;
   align-self: normal;
   border: 1px gray solid;
   border-radius: 30px;
-  padding: 20px;
+  padding: 10px;
   background-color: rgb(250, 250, 250);
-  margin-bottom: 10px;
-  max-width: 90%;
-  min-width: 90%;
+  margin-bottom: 5px;
+  margin-top: 5px;
 }
 
-.todo-item > input {
-  min-width: 40px;
+.todo-content {
+  flex: 1 0 0;
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+}
+
+.todo-content > input {
+  min-width: 35px;
   margin-right: 10px;
-  min-height: 40px;
+  min-height: 35px;
 }
 
 .todo-item:hover {
-  font-weight: bold;
+  text-shadow: 3px 2px #dadada;
 }
 
-.todo-item > input:checked + div {
+.todo-content input:checked + .todo-caption {
   text-decoration: line-through black;
   color: lightgray;
 }
-.todo-item > button {
-  position: absolute;
-  right: 10px;
+.button-container {
+}
 
+.button-container > button {
   border-radius: 50%;
-  display: none;
-  font-size: 2.5rem;
+  visibility: hidden;
+  font-size: 2rem;
   font-weight: bolder;
-  padding: 1rem 2rem 1rem 2rem;
+  /*padding: 1rem 2rem 1rem 2rem;*/
   background-image: radial-gradient(red, rgb(160, 52, 52));
 }
-.todo-item:hover > button {
-  display: inherit;
+
+.todo-item:hover button {
+  visibility: visible;
 }
-.todo-item > div {
+
+.todo-content,
+.todo-caption {
   overflow: auto;
-  max-width: 80%;
+  /* max-width: 80%;*/
 }

@@ -16,6 +16,12 @@ class TodoListHeader extends React.Component {
   render() {
     return (
       <div className="todo-list-header">
+        <button>
+          <img
+            width="40px"
+            src="https://icon-library.net/images/check-mark-icon-png/check-mark-icon-png-0.jpg"
+          />
+        </button>
         <form onSubmit={this.onFormSubmit}>
           <input
             placeholder="TODO item caption"

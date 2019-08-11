@@ -29,7 +29,7 @@ class TodoList extends React.Component {
       const id = oldState.id;
       localStorage.setItem("id", id + 1);
       const newItem = { id, name: itemName, completed: false };
-      const items = [].concat(oldState.items, newItem);
+      const items = [...oldState.items, newItem];
       localStorage.setItem("items", JSON.stringify(items));
       return { id: id + 1, items };
     });
@@ -37,7 +37,7 @@ class TodoList extends React.Component {
 
   onItemChecked = itemID => {
     this.setState(oldState => {
-      const items = [].concat(oldState.items);
+      const items = [...oldState.items];
       const item = items.find(item => item.id === itemID);
       item.completed = !item.completed;
       return { items };
