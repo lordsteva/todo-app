@@ -1,0 +1,47 @@
+.todo-item {
+  flex: 1 1 1px;
+  display: flex;
+  position: relative;
+  align-items: center;
+  align-self: normal;
+  border: 1px gray solid;
+  border-radius: 30px;
+  padding: 20px;
+  background-color: rgb(250, 250, 250);
+  margin-bottom: 10px;
+  max-width: 90%;
+  min-width: 90%;
+}
+
+.todo-item > input {
+  min-width: 40px;
+  margin-right: 10px;
+  min-height: 40px;
+}
+
+.todo-item:hover {
+  font-weight: bold;
+}
+
+.todo-item > input:checked + div {
+  text-decoration: line-through black;
+  color: lightgray;
+}
+.todo-item > button {
+  position: absolute;
+  right: 10px;
+
+  border-radius: 50%;
+  display: none;
+  font-size: 2.5rem;
+  font-weight: bolder;
+  padding: 1rem 2rem 1rem 2rem;
+  background-image: radial-gradient(red, rgb(160, 52, 52));
+}
+.todo-item:hover > button {
+  display: inherit;
+}
+.todo-item > div {
+  overflow: auto;
+  max-width: 80%;
+}

@@ -1,0 +1,10 @@
+.todo-list {
+  display: flex;
+  flex-flow: column wrap;
+  margin: auto;
+  align-content: center;
+  font-size: 3.3rem;
+  background-color: whitesmoke;
+  max-width: 80vw;
+  width: 80vw;
+}
