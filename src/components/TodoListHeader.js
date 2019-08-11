@@ -3,31 +3,33 @@ import "./TodoListHeader.css";
 
 class TodoListHeader extends React.Component {
   state = { name: "" };
-  onInputChange = e => {
+
+  onChange = e => {
     this.setState({ name: e.target.value });
   };
 
-  onFormSubmit = e => {
+  onSubmit = e => {
     e.preventDefault();
-    this.props.onFormSubmit(this.state.name);
+    this.props.onSubmit(this.state.name);
     this.setState({ name: "" });
   };
 
   render() {
     return (
       <div className="todo-list-header">
-        <button>
+        <button title="Mark all as completed">
           <img
             width="40px"
+            alt=""
             src="https://icon-library.net/images/check-mark-icon-png/check-mark-icon-png-0.jpg"
           />
         </button>
-        <form onSubmit={this.onFormSubmit}>
+        <form onSubmit={this.onSubmit}>
           <input
             placeholder="TODO item caption"
             type="text"
             value={this.state.name}
-            onChange={this.onInputChange}
+            onChange={this.onChange}
           />
         </form>
       </div>

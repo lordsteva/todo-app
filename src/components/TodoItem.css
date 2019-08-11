@@ -33,7 +33,10 @@
   text-decoration: line-through black;
   color: lightgray;
 }
+
 .button-container {
+  display: flex;
+  flex-direction: row;
 }
 
 .button-container > button {
