@@ -4,9 +4,10 @@ import TodoItem from "./TodoItem";
 import Utils from "./utils";
 
 import "./TodoList.css";
+import TodoListFooter from "./TodoListFooter";
 
 class TodoList extends React.Component {
-  state = { items: [], id: 1 };
+  state = { items: [], id: 1, filter: "All" };
 
   componentDidMount() {
     this.setState(Utils.loadData());
@@ -42,8 +43,19 @@ class TodoList extends React.Component {
     });
   };
 
+  filterItems = () =>
+    this.state.items.filter(
+      item =>
+        this.state.filter === "All" ||
+        item.completed === (this.state.filter === "Completed")
+    );
+
+  onFilterChange = filter => {
+    this.setState({ filter });
+  };
+
   render() {
-    const items = this.state.items.map(item => (
+    const items = this.filterItems().map(item => (
       <TodoItem
         onDelete={this.onItemDelete}
         key={item.id}
@@ -55,6 +67,11 @@ class TodoList extends React.Component {
       <div className="todo-list">
         <TodoListHeader onSubmit={this.onFormSubmit} items={this.state.items} />
         {items}
+        <TodoListFooter
+          left="5"
+          onFilterChange={this.onFilterChange}
+          selected={this.state.filter}
+        />
       </div>
     );
   }
