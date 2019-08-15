@@ -1,10 +1,9 @@
 import React from "react";
 import TodoListHeader from "./TodoListHeader";
+import TodoListFooter from "./TodoListFooter";
 import TodoItem from "./TodoItem";
 import Utils from "./utils";
-
 import "./TodoList.css";
-import TodoListFooter from "./TodoListFooter";
 
 class TodoList extends React.Component {
   state = { items: [], id: 1, filter: "All" };
@@ -13,10 +12,18 @@ class TodoList extends React.Component {
     this.setState(Utils.loadData());
   }
 
-  onItemDelete = itemID => {
+  markAllAsCompleted = () => {
     this.setState(oldState => {
       let items = [...oldState.items];
-      items = items.filter(item => item.id !== itemID);
+      items.forEach(item => (item.completed = true));
+      Utils.saveData(items);
+      return { items };
+    });
+  };
+
+  onItemDelete = itemID => {
+    this.setState(oldState => {
+      const items = [...oldState.items].filter(item => item.id !== itemID);
       Utils.saveData(items);
       return { items };
     });
@@ -26,8 +33,10 @@ class TodoList extends React.Component {
     if (!itemName) return;
     this.setState(oldState => {
       const id = oldState.id;
-      const newItem = { id, name: itemName, completed: false };
-      const items = [...oldState.items, newItem];
+      const items = [
+        ...oldState.items,
+        { id, name: itemName, completed: false }
+      ];
       Utils.saveData(items, id + 1);
       return { id: id + 1, items };
     });
@@ -54,6 +63,15 @@ class TodoList extends React.Component {
     this.setState({ filter });
   };
 
+  clearCompleted = () => {
+    this.setState(oldState => {
+      let items = [...oldState.items];
+      items = items.filter(item => !item.completed);
+      Utils.saveData(items);
+      return { items };
+    });
+  };
+
   render() {
     const items = this.filterItems().map(item => (
       <TodoItem
@@ -63,14 +81,20 @@ class TodoList extends React.Component {
         onChecked={this.onItemChecked}
       />
     ));
+    const completed = this.state.items.filter(item => item.completed).length;
     return (
       <div className="todo-list">
-        <TodoListHeader onSubmit={this.onFormSubmit} items={this.state.items} />
+        <TodoListHeader
+          onClick={this.markAllAsCompleted}
+          onSubmit={this.onFormSubmit}
+        />
         {items}
         <TodoListFooter
-          left="5"
+          completed={completed}
           onFilterChange={this.onFilterChange}
           selected={this.state.filter}
+          total={this.state.items.length}
+          clearCompleted={this.clearCompleted}
         />
       </div>
     );

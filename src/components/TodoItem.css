@@ -44,7 +44,6 @@
   visibility: hidden;
   font-size: 2rem;
   font-weight: bolder;
-  /*padding: 1rem 2rem 1rem 2rem;*/
   background-image: radial-gradient(red, rgb(160, 52, 52));
 }
 
@@ -55,5 +54,4 @@
 .todo-content,
 .todo-caption {
   overflow: auto;
-  /* max-width: 80%;*/
 }

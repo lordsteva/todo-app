@@ -14,10 +14,14 @@ class TodoListHeader extends React.Component {
     this.setState({ name: "" });
   };
 
+  onClick = e => {
+    this.props.onClick();
+  };
+
   render() {
     return (
       <div className="todo-list-header">
-        <button title="Mark all as completed">
+        <button onClick={this.onClick} title="Mark all as completed">
           <img
             width="40px"
             alt=""

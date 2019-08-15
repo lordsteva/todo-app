@@ -1,8 +1,8 @@
 import React from "react";
-//import "./TodoListFooter.css";
+import "./TodoListFooter.css";
 
 class TodoListFooter extends React.Component {
-  createAnchor = caption => {
+  creatFilter = caption => {
     const style =
       this.props.selected === caption ? { border: "1px solid red" } : {};
     return (
@@ -21,12 +21,23 @@ class TodoListFooter extends React.Component {
 
   render() {
     const props = this.props;
+    const divStyle = { visibility: props.total == 0 ? "hidden" : "visible" };
+    const btnStyle = {
+      visibility: props.completed == 0 ? "hidden" : "visible"
+    };
     return (
       <div className="todo-list-footer">
-        {props.left != 0 && <div>{`${props.left} tasks left`} </div>}
-        {this.createAnchor("All")}
-        {this.createAnchor("Completed")}
-        {this.createAnchor("Active")}
+        <div style={divStyle}>
+          {`${props.completed} / ${props.total} completed `}{" "}
+        </div>
+
+        {this.creatFilter("All")}
+        {this.creatFilter("Completed")}
+        {this.creatFilter("Active")}
+
+        <button style={btnStyle} onClick={this.props.clearCompleted}>
+          Clear completed
+        </button>
       </div>
     );
   }

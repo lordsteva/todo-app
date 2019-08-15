@@ -3,7 +3,6 @@ import "./TodoItem.css";
 
 class TodoItem extends React.PureComponent {
   onChecked = e => {
-    console.log(this.props.item);
     this.props.onChecked(this.props.item.id);
   };
 
@@ -12,16 +11,15 @@ class TodoItem extends React.PureComponent {
   };
 
   render() {
-    const { item } = this.props;
     return (
       <div className="todo-item">
         <div className="todo-content">
           <input
             onChange={this.onChecked}
             type="checkbox"
-            defaultChecked={item.completed}
+            defaultChecked={this.props.item.completed}
           />
-          <div className="todo-caption">{item.name}</div>
+          <div className="todo-caption">{this.props.item.name}</div>
         </div>
         <div className="button-container">
           <button onClick={this.onClick}>X</button>
