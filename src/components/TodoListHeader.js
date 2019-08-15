@@ -20,7 +20,6 @@ class TodoListHeader extends React.Component {
   };
 
   render() {
-    console.log(this.state.text);
     return (
       <div className="todo-list-header">
         <button onClick={this.onClick} title="Mark all as completed">

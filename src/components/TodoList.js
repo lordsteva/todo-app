@@ -70,7 +70,6 @@ class TodoList extends React.Component {
   };
 
   onCaptionChange = (itemID, text) => {
-    console.log(text);
     this.setState(oldState => {
       const items = [...oldState.items];
       const item = items.find(item => item.id === itemID);
