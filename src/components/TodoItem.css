@@ -39,12 +39,12 @@
   flex-direction: row;
 }
 
-.button-container > button {
+.button-container > * {
   border-radius: 50%;
   visibility: hidden;
+  padding: 0.5rem 1rem 0.5rem 1rem;
   font-size: 2rem;
   font-weight: bolder;
-  background-image: radial-gradient(red, rgb(160, 52, 52));
 }
 
 .todo-item:hover button {
@@ -54,4 +54,12 @@
 .todo-content,
 .todo-caption {
   overflow: auto;
+}
+
+.button-container > .delete-btn {
+  background-image: radial-gradient(red, rgb(160, 52, 52));
+}
+
+.button-container > .edit-btn > img {
+  width: 30px;
 }

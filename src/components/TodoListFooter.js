@@ -21,14 +21,14 @@ class TodoListFooter extends React.Component {
 
   render() {
     const props = this.props;
-    const divStyle = { visibility: props.total == 0 ? "hidden" : "visible" };
+    const divStyle = { visibility: props.total === 0 ? "hidden" : "visible" };
     const btnStyle = {
-      visibility: props.completed == 0 ? "hidden" : "visible"
+      visibility: props.completed === 0 ? "hidden" : "visible"
     };
     return (
       <div className="todo-list-footer">
         <div style={divStyle}>
-          {`${props.completed} / ${props.total} completed `}{" "}
+          {`${props.completed}/${props.total} completed `}
         </div>
 
         {this.creatFilter("All")}

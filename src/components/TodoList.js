@@ -29,14 +29,11 @@ class TodoList extends React.Component {
     });
   };
 
-  onFormSubmit = itemName => {
-    if (!itemName) return;
+  onFormSubmit = caption => {
+    if (!caption) return;
     this.setState(oldState => {
       const id = oldState.id;
-      const items = [
-        ...oldState.items,
-        { id, name: itemName, completed: false }
-      ];
+      const items = [...oldState.items, { id, caption, completed: false }];
       Utils.saveData(items, id + 1);
       return { id: id + 1, items };
     });
@@ -72,12 +69,24 @@ class TodoList extends React.Component {
     });
   };
 
+  onCaptionChange = (itemID, text) => {
+    console.log(text);
+    this.setState(oldState => {
+      const items = [...oldState.items];
+      const item = items.find(item => item.id === itemID);
+      item.caption = text;
+      Utils.saveData(items);
+      return { items };
+    });
+  };
+
   render() {
     const items = this.filterItems().map(item => (
       <TodoItem
         onDelete={this.onItemDelete}
         key={item.id}
         item={item}
+        onCaptionChange={this.onCaptionChange}
         onChecked={this.onItemChecked}
       />
     ));

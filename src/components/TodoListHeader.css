@@ -1,10 +1,3 @@
-.todo-list-header input {
-  font-size: 1.6rem;
-  border-radius: 20px;
-  padding: 5px;
-  padding-left: 10px;
-}
-
 .todo-list-header {
   min-width: 95%;
   border-bottom: 3px gray solid;
@@ -22,16 +15,7 @@
   border-radius: 50%;
 }
 
-::placeholder {
-  color: rgba(125, 125, 125, 0.25);
-}
-
 .todo-list-header > form {
-  flex: 1 1 auto;
-  display: flex;
-}
-
-.todo-list-header > form > input {
   flex: 1 1 auto;
   display: flex;
 }
