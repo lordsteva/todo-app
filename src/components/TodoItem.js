@@ -3,7 +3,7 @@ import "./TodoItem.css";
 import Modal from "./Modal";
 import TextInput from "./TextInput";
 
-class TodoItem extends React.Component {
+class TodoItem extends React.PureComponent {
   state = { editing: false };
   onChecked = e => {
     this.props.onChecked(this.props.item.id);
@@ -43,7 +43,7 @@ class TodoItem extends React.Component {
           <input
             onChange={this.onChecked}
             type="checkbox"
-            defaultChecked={this.props.item.completed}
+            checked={this.props.item.completed}
           />
           <div className="todo-caption">{this.props.item.caption}</div>
         </div>

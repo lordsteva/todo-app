@@ -5,7 +5,7 @@ import TodoItem from "./TodoItem";
 import Utils from "./utils";
 import "./TodoList.css";
 
-class TodoList extends React.Component {
+class TodoList extends React.PureComponent {
   state = { items: [], id: 1, filter: "All" };
 
   componentDidMount() {
@@ -14,8 +14,9 @@ class TodoList extends React.Component {
 
   markAllAsCompleted = () => {
     this.setState(oldState => {
-      let items = [...oldState.items];
-      items.forEach(item => (item.completed = true));
+      const items = oldState.items.map(item =>
+        item.completed ? item : { ...item, completed: true }
+      );
       Utils.saveData(items);
       return { items };
     });
@@ -41,9 +42,9 @@ class TodoList extends React.Component {
 
   onItemChecked = itemID => {
     this.setState(oldState => {
-      const items = [...oldState.items];
-      const item = items.find(item => item.id === itemID);
-      item.completed = !item.completed;
+      const items = oldState.items.map(item =>
+        item.id === itemID ? { ...item, completed: !item.completed } : item
+      );
       Utils.saveData(items);
       return { items };
     });
@@ -62,8 +63,7 @@ class TodoList extends React.Component {
 
   clearCompleted = () => {
     this.setState(oldState => {
-      let items = [...oldState.items];
-      items = items.filter(item => !item.completed);
+      const items = [...oldState.items].filter(item => !item.completed);
       Utils.saveData(items);
       return { items };
     });
@@ -71,9 +71,9 @@ class TodoList extends React.Component {
 
   onCaptionChange = (itemID, text) => {
     this.setState(oldState => {
-      const items = [...oldState.items];
-      const item = items.find(item => item.id === itemID);
-      item.caption = text;
+      const items = oldState.items.map(item =>
+        item.id === itemID ? { ...item, caption: text } : item
+      );
       Utils.saveData(items);
       return { items };
     });
