@@ -2,11 +2,13 @@ import React from "react";
 import TodoListHeader from "./TodoListHeader";
 import TodoListFooter from "./TodoListFooter";
 import TodoItem from "./TodoItem";
+import Modal from "./Modal";
+import TextInput from "./TextInput";
 import Utils from "./utils";
 import "./TodoList.css";
 
 class TodoList extends React.PureComponent {
-  state = { items: [], id: 1, filter: "All" };
+  state = { items: [], id: 1, filter: "All", editing: null };
 
   componentDidMount() {
     this.setState(Utils.loadData());
@@ -69,39 +71,58 @@ class TodoList extends React.PureComponent {
     });
   };
 
-  onCaptionChange = (itemID, text) => {
+  onCaptionChange = text => {
     this.setState(oldState => {
       const items = oldState.items.map(item =>
-        item.id === itemID ? { ...item, caption: text } : item
+        item.id === oldState.editing ? { ...item, caption: text } : item
       );
       Utils.saveData(items);
       return { items };
     });
   };
 
+  onEditStart = itemID => {
+    this.setState({ editing: itemID });
+  };
+
+  onEditStop = itemID => {
+    this.setState({ editing: null });
+  };
+
   render() {
-    const items = this.filterItems().map(item => (
+    const { items, editing, filter } = this.state;
+    const filteredItems = this.filterItems().map(item => (
       <TodoItem
         onDelete={this.onItemDelete}
         key={item.id}
         item={item}
-        onCaptionChange={this.onCaptionChange}
+        onEdit={this.onEditStart}
         onChecked={this.onItemChecked}
       />
     ));
-    const completed = this.state.items.filter(item => item.completed).length;
+    const completed = items.filter(item => item.completed).length;
     return (
       <div className="todo-list">
+        {editing ? (
+          <Modal onClose={this.onEditStop}>
+            <TextInput
+              text={items.find(item => item.id === editing).caption}
+              onChange={this.onCaptionChange}
+            />
+            <div>notifications</div>
+            <div>timer</div>
+          </Modal>
+        ) : null}
         <TodoListHeader
-          onClick={this.markAllAsCompleted}
+          markAllAsCompleted={this.markAllAsCompleted}
           onSubmit={this.onFormSubmit}
         />
-        {items}
+        {filteredItems}
         <TodoListFooter
           completed={completed}
           onFilterChange={this.onFilterChange}
-          selected={this.state.filter}
-          total={this.state.items.length}
+          selected={filter}
+          total={items.length}
           clearCompleted={this.clearCompleted}
         />
       </div>

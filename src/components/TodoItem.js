@@ -1,24 +1,17 @@
 import React from "react";
 import "./TodoItem.css";
-import Modal from "./Modal";
-import TextInput from "./TextInput";
 
 class TodoItem extends React.PureComponent {
-  state = { editing: false };
   onChecked = e => {
     this.props.onChecked(this.props.item.id);
   };
 
-  onClick = e => {
+  onDelete = e => {
     this.props.onDelete(this.props.item.id);
   };
 
   onEdit = () => {
-    this.setState({ editing: true });
-  };
-
-  onClose = () => {
-    this.setState({ editing: false });
+    this.props.onEdit(this.props.item.id);
   };
 
   onChange = e => {
@@ -28,17 +21,6 @@ class TodoItem extends React.PureComponent {
   render() {
     return (
       <div className="todo-item">
-        {this.state.editing ? (
-          <Modal onClose={this.onClose}>
-            <TextInput
-              text={this.props.item.caption}
-              onChange={this.onChange}
-            />
-
-            <div>notifications</div>
-            <div>timer</div>
-          </Modal>
-        ) : null}
         <div className="todo-content">
           <input
             onChange={this.onChecked}
@@ -57,7 +39,7 @@ class TodoItem extends React.PureComponent {
           <button
             className="delete-btn"
             title="Delete item"
-            onClick={this.onClick}
+            onClick={this.onDelete}
           >
             X
           </button>

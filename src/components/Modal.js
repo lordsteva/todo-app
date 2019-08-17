@@ -5,12 +5,7 @@ class Modal extends PureComponent {
   ref = React.createRef();
 
   onClose = () => {
-    // this.ref.current.style = { display: "none" };
     this.props.onClose();
-  };
-
-  onClick = e => {
-    if (e.target === this.ref.current) this.onClose();
   };
 
   render() {
@@ -20,14 +15,15 @@ class Modal extends PureComponent {
       flexDirection: "column"
     };
     return (
-      <div onClick={this.onClick} ref={this.ref} className="modal">
+      <>
+        <div onClick={this.onClose} className="modal-overlay" />
         <div className="modal-content">
           <span className="close" onClick={this.onClose}>
             &times;
           </span>
           <div style={containerStyle}>{this.props.children}</div>
         </div>
-      </div>
+      </>
     );
   }
 }

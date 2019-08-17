@@ -8,7 +8,7 @@ function TextInput(props) {
       placeholder={props.placeholder}
       type="text"
       value={props.text}
-      onChange={props.onChange}
+      onChange={e => props.onChange(e.target.value)}
     />
   );
 }

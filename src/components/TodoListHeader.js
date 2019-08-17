@@ -2,11 +2,11 @@ import React from "react";
 import "./TodoListHeader.css";
 import TextInput from "./TextInput";
 
-class TodoListHeader extends React.Component {
+class TodoListHeader extends React.PureComponent {
   state = { text: "" };
 
-  onChange = e => {
-    this.setState({ text: e.target.value });
+  onChange = text => {
+    this.setState({ text });
   };
 
   onSubmit = e => {
@@ -15,14 +15,14 @@ class TodoListHeader extends React.Component {
     this.setState({ text: "" });
   };
 
-  onClick = e => {
-    this.props.onClick();
+  markAllAsCompleted = e => {
+    this.props.markAllAsCompleted();
   };
 
   render() {
     return (
       <div className="todo-list-header">
-        <button onClick={this.onClick} title="Mark all as completed">
+        <button onClick={this.markAllAsCompleted} title="Mark all as completed">
           <img
             width="40px"
             alt=""

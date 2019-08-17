@@ -1,6 +1,6 @@
-.modal {
+.modal-overlay {
   display: block;
-  position: fixed;
+  position: absolute;
   z-index: 1;
   padding-top: 100px;
   left: 0;
@@ -14,11 +14,16 @@
 
 /* Modal Content */
 .modal-content {
+  --width: 80vw;
   background-color: #fefefe;
   margin: auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
+  width: var(--width);
+  left: calc(50% - var(--width) / 2);
+  top: 20vh;
+  position: absolute;
+  z-index: 10;
 }
 
 /* The Close Button */
