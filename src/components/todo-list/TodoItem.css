@@ -1,0 +1,65 @@
+.todo-item {
+  flex: 1 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  align-self: normal;
+  border: 1px gray solid;
+  border-radius: 30px;
+  padding: 10px;
+  background-color: rgb(250, 250, 250);
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+.todo-content {
+  flex: 1 0 0;
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+}
+
+.todo-content > input {
+  min-width: 35px;
+  margin-right: 10px;
+  min-height: 35px;
+}
+
+.todo-item:hover {
+  text-shadow: 3px 2px #dadada;
+}
+
+.todo-content input:checked + .todo-caption {
+  text-decoration: line-through black;
+  color: lightgray;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.button-container > * {
+  border-radius: 50%;
+  visibility: hidden;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  font-size: 2rem;
+  font-weight: bolder;
+}
+
+.todo-item:hover button {
+  visibility: visible;
+}
+
+.todo-content,
+.todo-caption {
+  overflow: auto;
+}
+
+.button-container > .delete-btn {
+  background-image: radial-gradient(red, rgb(160, 52, 52));
+}
+
+.button-container > .edit-btn > img {
+  width: 30px;
+}

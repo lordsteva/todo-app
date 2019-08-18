@@ -1,0 +1,21 @@
+.text-input {
+  font-size: 1.6rem;
+  border-radius: 20px;
+  padding: 5px;
+  flex: 1 1 auto;
+  padding-left: 10px;
+  outline: none;
+}
+
+::placeholder {
+  color: rgba(125, 125, 125, 0.25);
+}
+
+.todo-list-header > form {
+  flex: 1 1 auto;
+  display: flex;
+}
+
+.todo-list-header > form > input {
+  flex: 1 1 auto;
+}

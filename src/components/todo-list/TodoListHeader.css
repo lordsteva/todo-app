@@ -1,0 +1,21 @@
+.todo-list-header {
+  min-width: 95%;
+  border-bottom: 3px gray solid;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 10px;
+  padding: 20px;
+  padding-left: 10px;
+}
+
+.todo-list-header > button {
+  margin-right: 10px;
+  padding: 0px;
+  border-radius: 50%;
+}
+
+.todo-list-header > form {
+  flex: 1 1 auto;
+  display: flex;
+}
