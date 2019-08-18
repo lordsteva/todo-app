@@ -1,6 +1,6 @@
 import React from "react";
 import "./TodoListHeader.css";
-import TextInput from "./TextInput";
+import TextInput from "../common/TextInput";
 
 class TodoListHeader extends React.PureComponent {
   state = { text: "" };

@@ -6,33 +6,36 @@ class TodoListFooter extends React.PureComponent {
     const style =
       this.props.selected === caption ? { border: "1px solid red" } : {};
     return (
-      <a href={caption} onClick={this.onClick} style={style}>
+      <a
+        href={caption}
+        key={caption}
+        onClick={this.onFilterChange}
+        style={style}
+      >
         {caption}
       </a>
     );
   };
 
-  onClick = e => {
+  onFilterChange = e => {
     e.preventDefault();
-    let uri = e.target.href.split("/");
-    uri = uri[uri.length - 1];
-    this.props.onFilterChange(uri);
+    const filter = e.target.href.split("/").pop();
+    this.props.onFilterChange(filter);
   };
 
   render() {
-    const { total, completed, clearCompleted } = this.props;
+    const { total, completed, clearCompleted, filterTypes } = this.props;
     const divStyle = { visibility: total === 0 ? "hidden" : "visible" };
     const btnStyle = {
       visibility: completed === 0 ? "hidden" : "visible"
     };
+    const filters = Object.keys(filterTypes).map(key =>
+      this.renderFilter(filterTypes[key])
+    );
     return (
       <div className="todo-list-footer">
         <div style={divStyle}>{`${completed}/${total} completed `}</div>
-
-        {this.renderFilter("All")}
-        {this.renderFilter("Completed")}
-        {this.renderFilter("Active")}
-
+        {filters}
         <button style={btnStyle} onClick={clearCompleted}>
           Clear completed
         </button>

@@ -2,13 +2,19 @@ import React from "react";
 import TodoListHeader from "./TodoListHeader";
 import TodoListFooter from "./TodoListFooter";
 import TodoItem from "./TodoItem";
-import Modal from "./Modal";
-import TextInput from "./TextInput";
-import Utils from "./utils";
+import Modal from "../common/Modal";
+import TextInput from "../common/TextInput";
+import Utils from "../../utils";
 import "./TodoList.css";
 
 class TodoList extends React.PureComponent {
   state = { items: [], id: 1, filter: "All", editing: null };
+
+  filterTypes = {
+    ALL: "All",
+    ACTIVE: "Active",
+    COMPLETED: "Completed"
+  };
 
   componentDidMount() {
     this.setState(Utils.loadData());
@@ -55,8 +61,8 @@ class TodoList extends React.PureComponent {
   filterItems = () =>
     this.state.items.filter(
       item =>
-        this.state.filter === "All" ||
-        item.completed === (this.state.filter === "Completed")
+        this.state.filter === this.filterTypes.ALL ||
+        item.completed === (this.state.filter === this.filterTypes.COMPLETED)
     );
 
   onFilterChange = filter => {
@@ -121,6 +127,7 @@ class TodoList extends React.PureComponent {
         <TodoListFooter
           completed={completed}
           onFilterChange={this.onFilterChange}
+          filterTypes={this.filterTypes}
           selected={filter}
           total={items.length}
           clearCompleted={this.clearCompleted}
