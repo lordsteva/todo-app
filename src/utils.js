@@ -12,4 +12,19 @@ const saveData = (items, id) => {
   if (id) localStorage.setItem("id", id);
 };
 
-export default { loadData, saveData };
+const removeTodo = id => {
+  const items = JSON.parse(localStorage.getItem("items"));
+  const newItems = items.filter(item => item.id !== id);
+  localStorage.setItem("items", JSON.stringify(newItems));
+};
+
+const addTodo = caption => {
+  const items = JSON.parse(localStorage.getItem("items"));
+  const id = localStorage.getItem("id");
+  let item = { id, caption };
+  items.push();
+  saveData(items, id + 1);
+  return item;
+};
+
+export default { loadData, saveData, removeTodo, addTodo };
