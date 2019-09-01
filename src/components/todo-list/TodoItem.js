@@ -27,7 +27,6 @@ class TodoItem extends React.PureComponent {
 
   renderEditing = () => {
     const { editing, item } = this.props;
-    console.log(editing);
     return editing === item.id ? (
       <Modal onClose={this.toggleEdit}>
         <TextInput text={item.caption} onChange={this.onChange} />
