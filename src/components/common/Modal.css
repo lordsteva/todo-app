@@ -1,6 +1,6 @@
 .modal-overlay {
   display: block;
-  position: absolute;
+  position: fixed;
   z-index: 1;
   padding-top: 100px;
   left: 0;
@@ -22,7 +22,7 @@
   width: var(--width);
   left: calc(50% - var(--width) / 2);
   top: 20vh;
-  position: absolute;
+  position: fixed;
   z-index: 10;
 }
 

@@ -12,3 +12,16 @@ export const removeTodo = id => {
 export const addTodo = id => {
   return { type: "ADD_TODO", payload: database.addTodo(id) };
 };
+
+export const filterTodos = filter => {
+  return { type: "FILTER_TODOS", payload: filter };
+};
+
+export const editTodo = editedItem => {
+  database.editTodo(editedItem);
+  return { type: "EDIT_TODO", payload: editedItem };
+};
+
+export const startEditing = id => {
+  return { type: "START_EDITING", payload: id };
+};

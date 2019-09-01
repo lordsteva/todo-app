@@ -8,21 +8,36 @@ function todoItemsReducer(todoItems = [], action) {
       return [...todoItems, action.payload];
     case "REMOVE_TODO":
       return todoItems.filter(item => item.id !== action.payload);
+    case "EDIT_TODO":
+      const edited = action.payload;
+      return todoItems.map(item =>
+        item.id !== edited.id ? item : { ...item, ...edited }
+      );
     default:
       return todoItems;
   }
 }
 
-function editReducer(selected = null, action) {
+function editReducer(editing = null, action) {
   switch (action.type) {
-    case "EDIT_TODO":
+    case "START_EDITING":
       return action.payload;
     default:
-      return selected;
+      return editing;
+  }
+}
+
+function filterReducer(filter = "All", action) {
+  switch (action.type) {
+    case "FILTER_TODOS":
+      return action.payload;
+    default:
+      return filter;
   }
 }
 
 export default combineReducers({
   todoItems: todoItemsReducer,
-  selected: editReducer
+  editing: editReducer,
+  filter: filterReducer
 });

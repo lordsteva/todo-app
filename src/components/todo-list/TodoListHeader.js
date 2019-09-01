@@ -1,5 +1,7 @@
 import React from "react";
+import { addTodo, editTodo } from "../../actions";
 import "./TodoListHeader.css";
+import { connect } from "react-redux";
 import TextInput from "../common/TextInput";
 
 class TodoListHeader extends React.PureComponent {
@@ -11,12 +13,16 @@ class TodoListHeader extends React.PureComponent {
 
   onSubmit = e => {
     e.preventDefault();
-    this.props.onSubmit(this.state.text);
+    const { text } = this.state;
+    if (!text) return;
+    this.props.addTodo(text);
     this.setState({ text: "" });
   };
 
   markAllAsCompleted = e => {
-    this.props.markAllAsCompleted();
+    this.props.items.forEach(item =>
+      this.props.editTodo({ id: item.id, completed: true })
+    );
   };
 
   render() {
@@ -41,4 +47,7 @@ class TodoListHeader extends React.PureComponent {
   }
 }
 
-export default TodoListHeader;
+export default connect(
+  state => ({ items: state.todoItems }),
+  { addTodo, editTodo }
+)(TodoListHeader);
