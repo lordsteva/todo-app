@@ -11,6 +11,8 @@ const todoItemsReducer = (todoItems = [], action) => {
       return todoItems.map(item =>
         item.id !== edited.id ? item : { ...item, ...edited }
       );
+    case "REMOVE_COMPLETED_TODOS":
+      return todoItems.filter(item => !item.completed);
     default:
       return todoItems;
   }

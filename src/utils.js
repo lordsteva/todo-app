@@ -8,7 +8,7 @@ export const loadData = () => {
   return { id: 1, items: [] };
 };
 
-export const saveData = (items, id) => {
+const saveData = (items, id) => {
   localStorage.setItem("items", JSON.stringify(items));
   if (id) localStorage.setItem("id", id);
 };
@@ -35,10 +35,21 @@ export const editTodo = edited => {
   saveData(items);
 };
 
+export const removeCompletedTodos = () => {
+  let items = loadData().items;
+  items = items.filter(item => !item.completed);
+  saveData(items);
+};
 export const filterTypes = {
   ALL: "All",
   ACTIVE: "Active",
   COMPLETED: "Completed"
 };
 
-export default { loadData, saveData, addTodo, removeTodo, editTodo };
+export default {
+  loadData,
+  addTodo,
+  removeTodo,
+  editTodo,
+  removeCompletedTodos
+};

@@ -25,3 +25,8 @@ export const editTodo = editedItem => {
 export const startEditing = id => {
   return { type: "START_EDITING", payload: id };
 };
+
+export const removeCompletedTodos = () => {
+  database.removeCompletedTodos();
+  return { type: "REMOVE_COMPLETED_TODOS" };
+};

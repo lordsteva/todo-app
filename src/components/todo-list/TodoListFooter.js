@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { removeTodo, filterTodos } from "../../actions";
+import { removeTodo, filterTodos, removeCompletedTodos } from "../../actions";
 import { filterTypes } from "../../utils";
 import "./TodoListFooter.css";
 
@@ -12,9 +12,7 @@ class TodoListFooter extends React.PureComponent {
   };
 
   clearCompleted = () => {
-    this.props.items.forEach(element =>
-      element.completed ? this.props.removeTodo(element.id) : null
-    );
+    this.props.removeCompletedTodos();
   };
 
   renderFilter = caption => {
@@ -65,5 +63,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { removeTodo, filterTodos }
+  { removeTodo, filterTodos, removeCompletedTodos }
 )(TodoListFooter);
