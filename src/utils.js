@@ -1,9 +1,10 @@
-const loadData = () => {
+export const loadData = () => {
   const items = localStorage.getItem("items");
   if (items) {
     const id = localStorage.getItem("id");
     return { id: id * 1, items: JSON.parse(items) };
   }
+  saveData([], 1);
   return { id: 1, items: [] };
 };
 
@@ -12,4 +13,43 @@ const saveData = (items, id) => {
   if (id) localStorage.setItem("id", id);
 };
 
-export default { loadData, saveData };
+export const removeTodo = id => {
+  const items = JSON.parse(localStorage.getItem("items"));
+  const newItems = items.filter(item => item.id !== id);
+  localStorage.setItem("items", JSON.stringify(newItems));
+};
+
+export const addTodo = caption => {
+  const { id, items } = loadData();
+  let item = { id, caption, completed: false };
+  items.push(item);
+  saveData(items, id * 1 + 1);
+  return item;
+};
+
+export const editTodo = edited => {
+  let items = loadData().items;
+  items = items.map(item =>
+    item.id === edited.id ? { ...item, ...edited } : item
+  );
+  saveData(items);
+};
+
+export const removeCompletedTodos = () => {
+  let items = loadData().items;
+  items = items.filter(item => !item.completed);
+  saveData(items);
+};
+export const filterTypes = {
+  ALL: "All",
+  ACTIVE: "Active",
+  COMPLETED: "Completed"
+};
+
+export default {
+  loadData,
+  addTodo,
+  removeTodo,
+  editTodo,
+  removeCompletedTodos
+};
