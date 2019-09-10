@@ -10,7 +10,5 @@ const firebaseConfig = {
   appId: "1:61307047524:web:044202417ade4f0eb3d971"
 };
 
-export default firebase
-  .initializeApp(firebaseConfig)
-  .firestore()
-  .collection("todos");
+export const firestore = firebase.initializeApp(firebaseConfig).firestore();
+export const todosCollection = firestore.collection("todos");

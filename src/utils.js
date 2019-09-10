@@ -1,50 +1,41 @@
-import firestore from "./firestore";
+import { firestore, todosCollection } from "./firestore";
 
 export const loadData = async () => {
-  const todosCollection = await firestore.get();
-  return todosCollection.docs.map(entry => {
+  const todosRef = await todosCollection.get();
+  return todosRef.docs.map(entry => {
     let data = entry.data();
     return { id: entry.id, ...data };
   });
 };
 
-const saveData = (items, id) => {
-  localStorage.setItem("items", JSON.stringify(items));
-  if (id) localStorage.setItem("id", id);
-};
-
-export const removeTodo = id => {
-  const items = JSON.parse(localStorage.getItem("items"));
-  const newItems = items.filter(item => item.id !== id);
-  localStorage.setItem("items", JSON.stringify(newItems));
+export const removeTodo = async id => {
+  return await todosCollection.doc(id).delete();
 };
 
 export const addTodo = async caption => {
-  /* const { id, items } = loadData();
-  let item = { id, caption, completed: false };
-  items.push(item);
-  saveData(items, id * 1 + 1);*/
   const todo = {
     caption,
     completed: false
   };
-  const docRef = await firestore.add(todo);
+  const docRef = await todosCollection.add(todo);
   todo.id = docRef.id;
   return todo;
 };
 
-export const editTodo = edited => {
-  let items = loadData().items;
-  items = items.map(item =>
-    item.id === edited.id ? { ...item, ...edited } : item
-  );
-  saveData(items);
+export const editTodo = async edited => {
+  let data = { ...edited };
+  delete data.id;
+  return await todosCollection.doc(edited.id).update(data);
 };
 
-export const removeCompletedTodos = () => {
-  let items = loadData().items;
-  items = items.filter(item => !item.completed);
-  saveData(items);
+export const removeCompletedTodos = async () => {
+  const todosRef = await todosCollection.get();
+  const batch = firestore.batch();
+
+  todosRef.docs.forEach(doc => {
+    if (doc.data()["completed"]) batch.delete(doc.ref);
+  });
+  return await batch.commit();
 };
 export const filterTypes = {
   ALL: "All",
