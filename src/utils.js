@@ -2,9 +2,9 @@ import { firestore, todosCollection } from "./firestore";
 
 export const loadData = async () => {
   const todosRef = await todosCollection.get();
-  return todosRef.docs.map(entry => {
-    let data = entry.data();
-    return { id: entry.id, ...data };
+  return todosRef.docs.map(doc => {
+    const data = doc.data();
+    return { id: doc.id, ...data };
   });
 };
 
@@ -37,6 +37,7 @@ export const removeCompletedTodos = async () => {
   });
   return await batch.commit();
 };
+
 export const filterTypes = {
   ALL: "All",
   ACTIVE: "Active",
