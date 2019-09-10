@@ -1,11 +1,11 @@
-export const loadData = () => {
-  const items = localStorage.getItem("items");
-  if (items) {
-    const id = localStorage.getItem("id");
-    return { id: id * 1, items: JSON.parse(items) };
-  }
-  saveData([], 1);
-  return { id: 1, items: [] };
+import firestore from "./firestore";
+
+export const loadData = async () => {
+  const todosCollection = await firestore.get();
+  return todosCollection.docs.map(entry => {
+    let data = entry.data();
+    return { id: entry.id, ...data };
+  });
 };
 
 const saveData = (items, id) => {
@@ -19,12 +19,18 @@ export const removeTodo = id => {
   localStorage.setItem("items", JSON.stringify(newItems));
 };
 
-export const addTodo = caption => {
-  const { id, items } = loadData();
+export const addTodo = async caption => {
+  /* const { id, items } = loadData();
   let item = { id, caption, completed: false };
   items.push(item);
-  saveData(items, id * 1 + 1);
-  return item;
+  saveData(items, id * 1 + 1);*/
+  const todo = {
+    caption,
+    completed: false
+  };
+  const docRef = await firestore.add(todo);
+  todo.id = docRef.id;
+  return todo;
 };
 
 export const editTodo = edited => {

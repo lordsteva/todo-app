@@ -1,7 +1,8 @@
 import database from "../utils";
 
-export const fetchTodos = () => {
-  return { type: "FETCH_TODOS", payload: database.loadData().items };
+export const fetchTodos = () => async dispatch => {
+  const todos = await database.loadData();
+  dispatch({ type: "FETCH_TODOS", payload: todos });
 };
 
 export const removeTodo = id => {
@@ -9,8 +10,10 @@ export const removeTodo = id => {
   return { type: "REMOVE_TODO", payload: id };
 };
 
-export const addTodo = id => {
-  return { type: "ADD_TODO", payload: database.addTodo(id) };
+export const addTodo = caption => async dispatch => {
+  // return { type: "ADD_TODO", payload: database.addTodo(todo) };
+  const todo = await database.addTodo(caption);
+  dispatch({ type: "ADD_TODO", payload: todo });
 };
 
 export const filterTodos = filter => {
