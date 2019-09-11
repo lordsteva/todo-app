@@ -1,7 +1,8 @@
+import firebase from "firebase";
 import { firestore, todosCollection } from "./firestore";
 
 export const loadData = async () => {
-  const todosRef = await todosCollection.get();
+  const todosRef = await todosCollection.orderBy("created").get();
   return todosRef.docs.map(doc => {
     const data = doc.data();
     return { id: doc.id, ...data };
@@ -14,6 +15,7 @@ export const removeTodo = async id => {
 
 export const addTodo = async caption => {
   const todo = {
+    created: firebase.firestore.Timestamp.fromDate(new Date()),
     caption,
     completed: false
   };

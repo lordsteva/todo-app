@@ -1,8 +1,9 @@
+import types from "../actions/actionTypes";
 import { filterTypes } from "../utils";
 
 const filterReducer = (filter = filterTypes.ALL, action) => {
   switch (action.type) {
-    case "FILTER_TODOS":
+    case types.FILTER_TODOS:
       return action.payload;
     default:
       return filter;
