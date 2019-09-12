@@ -1,45 +1,45 @@
-export const loadData = () => {
-  const items = localStorage.getItem("items");
-  if (items) {
-    const id = localStorage.getItem("id");
-    return { id: id * 1, items: JSON.parse(items) };
-  }
-  saveData([], 1);
-  return { id: 1, items: [] };
+import firebase from "firebase";
+import { firestore, todosCollection } from "./firestore";
+
+export const loadData = async () => {
+  const todosRef = await todosCollection.orderBy("created").get();
+  return todosRef.docs.map(doc => {
+    const data = doc.data();
+    return { id: doc.id, ...data };
+  });
 };
 
-const saveData = (items, id) => {
-  localStorage.setItem("items", JSON.stringify(items));
-  if (id) localStorage.setItem("id", id);
+export const removeTodo = async id => {
+  return await todosCollection.doc(id).delete();
 };
 
-export const removeTodo = id => {
-  const items = JSON.parse(localStorage.getItem("items"));
-  const newItems = items.filter(item => item.id !== id);
-  localStorage.setItem("items", JSON.stringify(newItems));
+export const addTodo = async caption => {
+  const todo = {
+    created: firebase.firestore.Timestamp.fromDate(new Date()),
+    caption,
+    completed: false
+  };
+  const docRef = await todosCollection.add(todo);
+  todo.id = docRef.id;
+  return todo;
 };
 
-export const addTodo = caption => {
-  const { id, items } = loadData();
-  let item = { id, caption, completed: false };
-  items.push(item);
-  saveData(items, id * 1 + 1);
-  return item;
+export const editTodo = async edited => {
+  let data = { ...edited };
+  delete data.id;
+  return await todosCollection.doc(edited.id).update(data);
 };
 
-export const editTodo = edited => {
-  let items = loadData().items;
-  items = items.map(item =>
-    item.id === edited.id ? { ...item, ...edited } : item
-  );
-  saveData(items);
+export const removeCompletedTodos = async () => {
+  const todosRef = await todosCollection.get();
+  const batch = firestore.batch();
+
+  todosRef.docs.forEach(doc => {
+    if (doc.data()["completed"]) batch.delete(doc.ref);
+  });
+  return await batch.commit();
 };
 
-export const removeCompletedTodos = () => {
-  let items = loadData().items;
-  items = items.filter(item => !item.completed);
-  saveData(items);
-};
 export const filterTypes = {
   ALL: "All",
   ACTIVE: "Active",

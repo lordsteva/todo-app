@@ -1,6 +1,7 @@
+import types from "../actions/actionTypes";
 const editReducer = (editing = null, action) => {
   switch (action.type) {
-    case "START_EDITING":
+    case types.START_EDITING:
       return action.payload;
     default:
       return editing;
