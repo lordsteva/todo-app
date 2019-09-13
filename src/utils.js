@@ -70,5 +70,6 @@ export default {
   removeTodo,
   editTodo,
   removeCompletedTodos,
-  startTimer
+  startTimer,
+  endTimer
 };

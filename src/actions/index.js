@@ -34,13 +34,24 @@ export const removeCompletedTodos = () => async dispatch => {
   dispatch({ type: types.REMOVE_COMPLETED_TODOS });
 };
 
-export const startTimer = todoId => async dispatch => {
+export const startTimer = todoId => async (dispatch, getState) => {
+  const state = getState();
+  if (state.timers.active) endTimer(state.timers.active)(dispatch, getState);
+  if (!state.timers.all[todoId]) {
+    //fetchTimers
+  }
   const timer = await database.startTimer(todoId);
   console.log(timer);
   dispatch({ type: types.START_TIMER, payload: timer });
 };
 
-export const endTimer = timerId => async dispatch => {
-  await database.endTimer();
-  dispatch({ type: types.END_TIMER });
+export const endTimer = () => async (dispatch, getState) => {
+  const state = getState();
+  const endTime = await database.endTimer(state.timers.active.id);
+  dispatch({ type: types.END_TIMER, payload: endTime });
+};
+
+export const fetchTimers = todoId => async dispatch => {
+  const timers = await database.fetchTimers(todoId);
+  dispatch({ type: types.FETCH_TIMERS, payload: timers });
 };

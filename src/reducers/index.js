@@ -8,5 +8,5 @@ export default combineReducers({
   todoItems: todoItemsReducer,
   editing: editReducer,
   filter: filterReducer,
-  timer: timerReducer
+  timers: timerReducer
 });
