@@ -1,4 +1,5 @@
 import types from "../actions/actionTypes";
+
 const editReducer = (editing = null, action) => {
   switch (action.type) {
     case types.START_EDITING:

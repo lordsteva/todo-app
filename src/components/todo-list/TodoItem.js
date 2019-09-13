@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { removeTodo, startEditing, editTodo } from "../../actions";
+import { removeTodo, startEditing, editTodo, startTimer } from "../../actions";
 import Modal from "../common/Modal";
 import TextInput from "../common/TextInput";
 import "./TodoItem.css";
@@ -23,6 +23,10 @@ class TodoItem extends React.PureComponent {
   onChange = e => {
     const { id } = this.props.item;
     this.props.editTodo({ id, caption: e });
+  };
+
+  startTimer = e => {
+    this.props.startTimer(this.props.item.id);
   };
 
   renderEditing = () => {
@@ -66,6 +70,13 @@ class TodoItem extends React.PureComponent {
             >
               X
             </button>
+            <button
+              className="delete-btn"
+              title="Delete item"
+              onClick={this.startTimer}
+            >
+              st
+            </button>
           </div>
         </div>
       </>
@@ -77,5 +88,5 @@ const mapStateToProps = state => ({ editing: state.editing });
 
 export default connect(
   mapStateToProps,
-  { removeTodo, startEditing, editTodo }
+  { removeTodo, startEditing, editTodo, startTimer }
 )(TodoItem);

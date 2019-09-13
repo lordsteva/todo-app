@@ -33,3 +33,14 @@ export const removeCompletedTodos = () => async dispatch => {
   await database.removeCompletedTodos();
   dispatch({ type: types.REMOVE_COMPLETED_TODOS });
 };
+
+export const startTimer = todoId => async dispatch => {
+  const timer = await database.startTimer(todoId);
+  console.log(timer);
+  dispatch({ type: types.START_TIMER, payload: timer });
+};
+
+export const endTimer = timerId => async dispatch => {
+  await database.endTimer();
+  dispatch({ type: types.END_TIMER });
+};

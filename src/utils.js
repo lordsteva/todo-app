@@ -1,5 +1,5 @@
 import firebase from "firebase";
-import { firestore, todosCollection } from "./firestore";
+import { firestore, todosCollection, timersCollection } from "./firestore";
 
 export const loadData = async () => {
   const todosRef = await todosCollection.orderBy("created").get();
@@ -40,6 +40,24 @@ export const removeCompletedTodos = async () => {
   return await batch.commit();
 };
 
+export const startTimer = async todoId => {
+  const docRef = todosCollection.doc(todoId);
+  const startTime = firebase.firestore.Timestamp.fromDate(new Date());
+  const timer = {
+    startTime,
+    docRef
+  };
+  const timerRef = await timersCollection.add(timer);
+  return { id: timerRef.id, todoId, startTime };
+};
+
+export const endTimer = async timerId => {
+  const endTime = firebase.firestore.Timestamp.fromDate(new Date());
+  const timerRef = timersCollection.doc(timerId);
+  await timerRef.update({ endTime });
+  return endTime;
+};
+
 export const filterTypes = {
   ALL: "All",
   ACTIVE: "Active",
@@ -51,5 +69,6 @@ export default {
   addTodo,
   removeTodo,
   editTodo,
-  removeCompletedTodos
+  removeCompletedTodos,
+  startTimer
 };
