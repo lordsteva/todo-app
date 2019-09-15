@@ -11,6 +11,7 @@ import Modal from "../common/Modal";
 import TextInput from "../common/TextInput";
 import "./TodoItem.css";
 import timer from "../../img/timer.png";
+import TimersHistory from "../TimersHistory";
 
 class TodoItem extends React.PureComponent {
   btnProperties = {
@@ -56,8 +57,9 @@ class TodoItem extends React.PureComponent {
     return editing === item.id ? (
       <Modal onClose={this.toggleEdit}>
         <TextInput text={item.caption} onChange={this.onChange} />
-        <div>notifications</div>
-        <div>timer</div>
+        <div>
+          <TimersHistory item={item} />
+        </div>
       </Modal>
     ) : null;
   };
@@ -76,7 +78,6 @@ class TodoItem extends React.PureComponent {
   };
 
   render() {
-    console.log(this.btnProperties);
     return (
       <>
         {this.renderEditing()}

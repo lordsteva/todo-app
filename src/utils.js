@@ -1,5 +1,6 @@
 import firebase from "firebase";
 import { firestore, todosCollection, timersCollection } from "./firestore";
+import debounce from "lodash.debounce";
 
 const loadData = async () => {
   const todosRef = await todosCollection.orderBy("created").get();
@@ -10,6 +11,7 @@ const loadData = async () => {
 };
 
 const removeTodo = async id => {
+  await _removeTimers(id);
   return await todosCollection.doc(id).delete();
 };
 
@@ -19,33 +21,37 @@ const addTodo = async caption => {
     caption,
     completed: false
   };
-  const docRef = await todosCollection.add(todo);
-  todo.id = docRef.id;
+  const todoRef = await todosCollection.add(todo);
+  todo.id = todoRef.id;
   return todo;
 };
 
-const editTodo = async edited => {
+const editTodo = debounce(async edited => {
   let data = { ...edited };
   delete data.id;
   return await todosCollection.doc(edited.id).update(data);
-};
+}, 200);
 
 const removeCompletedTodos = async () => {
   const todosRef = await todosCollection.get();
   const batch = firestore.batch();
-
+  const removed = {};
   todosRef.docs.forEach(doc => {
-    if (doc.data()["completed"]) batch.delete(doc.ref);
+    if (doc.data()["completed"]) {
+      batch.delete(doc.ref);
+      removed[doc.id] = doc.id;
+    }
   });
-  return await batch.commit();
+  await batch.commit();
+  return removed;
 };
 
 const startTimer = async todoId => {
-  const docRef = todosCollection.doc(todoId);
+  const todoRef = todosCollection.doc(todoId);
   const startTime = firebase.firestore.Timestamp.fromDate(new Date());
   const timer = {
     startTime,
-    docRef
+    todoRef
   };
   const timerRef = await timersCollection.add(timer);
   return { id: timerRef.id, todoId, startTime };
@@ -59,16 +65,29 @@ export const endTimer = async timerId => {
 };
 
 export const fetchTimers = async () => {
-  const timersRef = await timersCollection.get();
+  const timersRef = await timersCollection.orderBy("startTime").get();
   return timersRef.docs.map(timer => {
     const data = timer.data();
     return {
       id: timer.id,
-      todoId: data.docRef.id,
+      todoId: data.todoRef.id,
       startTime: data.startTime,
       endTime: data.endTime
     };
   });
+};
+
+const _removeTimers = async todoId => {
+  const todoRef = todosCollection.doc(todoId);
+  const timersRef = await timersCollection
+    .where("todoRef", "==", todoRef)
+    .get();
+  const batch = firestore.batch();
+
+  timersRef.docs.forEach(doc => {
+    batch.delete(doc.ref);
+  });
+  return await batch.commit();
 };
 
 export const filterTypes = {

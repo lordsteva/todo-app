@@ -1,10 +1,8 @@
 import database from "../utils";
 import types from "./actionTypes";
 
-export const fetchTodos = () => async (dispatch, getState) => {
+export const fetchTodos = () => async dispatch => {
   const todos = await database.loadData();
-  console.log(getState());
-
   dispatch({ type: types.FETCH_TODOS, payload: todos });
 };
 
@@ -22,9 +20,16 @@ export const filterTodos = filter => {
   return { type: types.FILTER_TODOS, payload: filter };
 };
 
-export const editTodo = editedItem => {
+export const editTodo = editedItem => async (dispatch, getState) => {
+  const { timers } = getState();
+  if (
+    timers.active &&
+    timers.active.todoId === editedItem.id &&
+    editedItem.completed
+  )
+    endTimer()(dispatch, getState);
   database.editTodo(editedItem);
-  return { type: types.EDIT_TODO, payload: editedItem };
+  dispatch({ type: types.EDIT_TODO, payload: editedItem });
 };
 
 export const startEditing = id => {
@@ -32,18 +37,14 @@ export const startEditing = id => {
 };
 
 export const removeCompletedTodos = () => async dispatch => {
-  await database.removeCompletedTodos();
-  dispatch({ type: types.REMOVE_COMPLETED_TODOS });
+  const removed = await database.removeCompletedTodos();
+  dispatch({ type: types.REMOVE_COMPLETED_TODOS, payload: removed });
 };
 
 export const startTimer = todoId => async (dispatch, getState) => {
   const state = getState();
   if (state.timers.active) endTimer(state.timers.active)(dispatch, getState);
-  if (!state.timers.all[todoId]) {
-    //fetchTimers
-  }
   const timer = await database.startTimer(todoId);
-  console.log(timer);
   dispatch({ type: types.START_TIMER, payload: timer });
 };
 
@@ -53,8 +54,7 @@ export const endTimer = () => async (dispatch, getState) => {
   dispatch({ type: types.END_TIMER, payload: endTime });
 };
 
-export const fetchTimers = todoId => async (dispatch, getState) => {
-  const timers = await database.fetchTimers(todoId);
-  console.log(getState());
+export const fetchTimers = () => async dispatch => {
+  const timers = await database.fetchTimers();
   dispatch({ type: types.FETCH_TIMERS, payload: timers });
 };
