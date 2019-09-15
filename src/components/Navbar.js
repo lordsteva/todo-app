@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import Timer from "./Timer";
+import Timer from "./timer/Timer";
 import logo from "../img/logo.png";
 import "./Navbar.css";
 

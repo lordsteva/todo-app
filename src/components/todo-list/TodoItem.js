@@ -11,7 +11,7 @@ import Modal from "../common/Modal";
 import TextInput from "../common/TextInput";
 import "./TodoItem.css";
 import timer from "../../img/timer.png";
-import TimersHistory from "../TimersHistory";
+import TimersHistory from "../timer/TimersHistory";
 
 class TodoItem extends React.PureComponent {
   btnProperties = {

@@ -13,9 +13,6 @@ const timerReducer = (timers = { active: null, all: [] }, action) => {
       const newTimers = timers.all.map(timer =>
         timer.id === timers.active.id ? { ...timer, endTime: payload } : timer
       );
-      console.log(timers.active);
-      console.log(newTimers);
-
       return { all: newTimers, active: null };
     case types.FETCH_TIMERS:
       let activeTimer = payload.find(timer => timer.endTime === undefined);

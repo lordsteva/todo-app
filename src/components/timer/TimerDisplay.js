@@ -1,5 +1,5 @@
 import React from "react";
-import { getTimeString } from "../timeUtils";
+import { getTimeString } from "../../timeUtils";
 import { connect } from "react-redux";
 
 class TimerDisplay extends React.PureComponent {

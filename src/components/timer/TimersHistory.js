@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { getTimeString } from "../timeUtils";
+import { getTimeString } from "../../timeUtils";
 import TimerDisplay from "./TimerDisplay";
 import "./TimersHistory.css";
 

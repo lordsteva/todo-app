@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { endTimer, fetchTimers } from "../actions";
+import { endTimer, fetchTimers } from "../../actions";
 import TimerDisplay from "./TimerDisplay";
 import "./Timer.css";
 
