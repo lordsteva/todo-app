@@ -1,17 +1,17 @@
 import React from "react";
 import { connect } from "react-redux";
-import { endTimer } from "../utils";
+import Timer from "./Timer";
+import logo from "../img/logo.png";
+import "./Navbar.css";
 
-class Navbar extends React.PureComponent {
-  state = { timeElapsed: 0 };
-
-  renderActiveTimer = () => {
-    return <div>neki ima</div>;
-  };
-
+class Navbar extends React.Component {
   render() {
-    if (this.props.activeTimer) return this.renderActiveTimer();
-    return <div>No active timer</div>;
+    return (
+      <div className="navbar">
+        <img className="logo" alt="logo" src={logo} />
+        <Timer />
+      </div>
+    );
   }
 }
 
@@ -19,7 +19,4 @@ const mapStateToProps = state => {
   return { activeTimer: state.timers.active };
 };
 
-export default connect(
-  mapStateToProps,
-  { endTimer }
-)(Navbar);
+export default connect(mapStateToProps)(Navbar);

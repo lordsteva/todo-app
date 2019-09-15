@@ -1,7 +1,7 @@
 import firebase from "firebase";
 import { firestore, todosCollection, timersCollection } from "./firestore";
 
-export const loadData = async () => {
+const loadData = async () => {
   const todosRef = await todosCollection.orderBy("created").get();
   return todosRef.docs.map(doc => {
     const data = doc.data();
@@ -9,11 +9,11 @@ export const loadData = async () => {
   });
 };
 
-export const removeTodo = async id => {
+const removeTodo = async id => {
   return await todosCollection.doc(id).delete();
 };
 
-export const addTodo = async caption => {
+const addTodo = async caption => {
   const todo = {
     created: firebase.firestore.Timestamp.fromDate(new Date()),
     caption,
@@ -24,13 +24,13 @@ export const addTodo = async caption => {
   return todo;
 };
 
-export const editTodo = async edited => {
+const editTodo = async edited => {
   let data = { ...edited };
   delete data.id;
   return await todosCollection.doc(edited.id).update(data);
 };
 
-export const removeCompletedTodos = async () => {
+const removeCompletedTodos = async () => {
   const todosRef = await todosCollection.get();
   const batch = firestore.batch();
 
@@ -40,7 +40,7 @@ export const removeCompletedTodos = async () => {
   return await batch.commit();
 };
 
-export const startTimer = async todoId => {
+const startTimer = async todoId => {
   const docRef = todosCollection.doc(todoId);
   const startTime = firebase.firestore.Timestamp.fromDate(new Date());
   const timer = {
@@ -58,6 +58,19 @@ export const endTimer = async timerId => {
   return endTime;
 };
 
+export const fetchTimers = async () => {
+  const timersRef = await timersCollection.get();
+  return timersRef.docs.map(timer => {
+    const data = timer.data();
+    return {
+      id: timer.id,
+      todoId: data.docRef.id,
+      startTime: data.startTime,
+      endTime: data.endTime
+    };
+  });
+};
+
 export const filterTypes = {
   ALL: "All",
   ACTIVE: "Active",
@@ -71,5 +84,6 @@ export default {
   editTodo,
   removeCompletedTodos,
   startTimer,
-  endTimer
+  endTimer,
+  fetchTimers
 };

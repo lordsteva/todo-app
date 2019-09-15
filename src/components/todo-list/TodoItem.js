@@ -75,7 +75,6 @@ class TodoItem extends React.PureComponent {
   };
 
   render() {
-    console.log(this.props);
     return (
       <>
         {this.renderEditing()}

@@ -1,8 +1,10 @@
 import database from "../utils";
 import types from "./actionTypes";
 
-export const fetchTodos = () => async dispatch => {
+export const fetchTodos = () => async (dispatch, getState) => {
   const todos = await database.loadData();
+  console.log(getState());
+
   dispatch({ type: types.FETCH_TODOS, payload: todos });
 };
 
@@ -51,7 +53,8 @@ export const endTimer = () => async (dispatch, getState) => {
   dispatch({ type: types.END_TIMER, payload: endTime });
 };
 
-export const fetchTimers = todoId => async dispatch => {
+export const fetchTimers = todoId => async (dispatch, getState) => {
   const timers = await database.fetchTimers(todoId);
+  console.log(getState());
   dispatch({ type: types.FETCH_TIMERS, payload: timers });
 };
