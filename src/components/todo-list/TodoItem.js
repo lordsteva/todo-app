@@ -10,8 +10,20 @@ import {
 import Modal from "../common/Modal";
 import TextInput from "../common/TextInput";
 import "./TodoItem.css";
+import timer from "../../img/timer.png";
 
 class TodoItem extends React.PureComponent {
+  btnProperties = {
+    start: {
+      title: "Start timer",
+      className: "timer-btn btn-start"
+    },
+    end: {
+      title: "Stop timer",
+      className: "timer-btn btn-end"
+    }
+  };
+
   onChecked = e => {
     const { id, completed } = this.props.item;
     this.props.editTodo({ id, completed: !completed });
@@ -51,30 +63,20 @@ class TodoItem extends React.PureComponent {
   };
 
   renderTimerButton = () => {
+    if (this.props.item.completed) return null;
     const { activeTimer } = this.props;
-    if (activeTimer) {
-      return (
-        <button
-          className="timer-btn btn-end"
-          title="Stop timer"
-          onClick={this.endTimer}
-        >
-          End timer
-        </button>
-      );
-    }
+    const btn = activeTimer ? "end" : "start";
+    const btnProps = this.btnProperties[btn];
+    const onClick = activeTimer ? this.endTimer : this.startTimer;
     return (
-      <button
-        className="timer-btn btn-start"
-        title="Start timer"
-        onClick={this.startTimer}
-      >
-        Start timer
+      <button {...btnProps} onClick={onClick}>
+        <img src={timer} alt="timer" />
       </button>
     );
   };
 
   render() {
+    console.log(this.btnProperties);
     return (
       <>
         {this.renderEditing()}
@@ -88,6 +90,7 @@ class TodoItem extends React.PureComponent {
             <div className="todo-caption">{this.props.item.caption}</div>
           </div>
           <div className="button-container">
+            {this.renderTimerButton()}
             <button
               className="edit-btn"
               title="Edit item"
@@ -105,7 +108,6 @@ class TodoItem extends React.PureComponent {
             >
               X
             </button>
-            {this.renderTimerButton()}
           </div>
         </div>
       </>

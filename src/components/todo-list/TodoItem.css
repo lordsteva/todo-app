@@ -41,6 +41,7 @@
 
 .button-container > * {
   border-radius: 50%;
+  outline: none;
   visibility: hidden;
   padding: 0.5rem 1rem 0.5rem 1rem;
   font-size: 2rem;
@@ -62,4 +63,16 @@
 
 .button-container > .edit-btn > img {
   width: 30px;
+}
+
+.timer-btn > img {
+  width: 30px;
+}
+
+.btn-start {
+  background-color: greenyellow;
+}
+
+.btn-end {
+  background-color: lightcoral;
 }

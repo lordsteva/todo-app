@@ -40,6 +40,7 @@ class Timer extends React.Component {
             <button onClick={this.props.endTimer}>Stop timer </button>
           </div>
         </div>
+        <hr style={{ margin: "1px", border: "0" }} />
         <div className="timer-container">
           <div className="caption">Todo caption:&nbsp;</div>
           <div className="content">{this.props.caption}</div>
