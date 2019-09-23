@@ -1,5 +1,6 @@
 import database from "../utils";
 import types from "./actionTypes";
+import { startTimer, endTimer, fetchTimers } from "./TimerActions";
 
 export const fetchTodos = () => async dispatch => {
   const todos = await database.loadData();
@@ -20,9 +21,16 @@ export const filterTodos = filter => {
   return { type: types.FILTER_TODOS, payload: filter };
 };
 
-export const editTodo = editedItem => {
+export const editTodo = editedItem => async (dispatch, getState) => {
+  const { timers } = getState();
+  if (
+    timers.active &&
+    timers.active.todoId === editedItem.id &&
+    editedItem.completed
+  )
+    endTimer()(dispatch, getState);
   database.editTodo(editedItem);
-  return { type: types.EDIT_TODO, payload: editedItem };
+  dispatch({ type: types.EDIT_TODO, payload: editedItem });
 };
 
 export const startEditing = id => {
@@ -30,6 +38,8 @@ export const startEditing = id => {
 };
 
 export const removeCompletedTodos = () => async dispatch => {
-  await database.removeCompletedTodos();
-  dispatch({ type: types.REMOVE_COMPLETED_TODOS });
+  const removed = await database.removeCompletedTodos();
+  dispatch({ type: types.REMOVE_COMPLETED_TODOS, payload: removed });
 };
+
+export { fetchTimers, startTimer, endTimer };

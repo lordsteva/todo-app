@@ -1,11 +1,30 @@
 import React from "react";
 import { connect } from "react-redux";
-import { removeTodo, startEditing, editTodo } from "../../actions";
+import {
+  removeTodo,
+  startEditing,
+  editTodo,
+  startTimer,
+  endTimer
+} from "../../actions";
 import Modal from "../common/Modal";
 import TextInput from "../common/TextInput";
 import "./TodoItem.css";
+import timer from "../../img/timer.png";
+import TimersHistory from "../timer/TimersHistory";
 
 class TodoItem extends React.PureComponent {
+  btnProperties = {
+    start: {
+      title: "Start timer",
+      className: "timer-btn btn-start"
+    },
+    end: {
+      title: "Stop timer",
+      className: "timer-btn btn-end"
+    }
+  };
+
   onChecked = e => {
     const { id, completed } = this.props.item;
     this.props.editTodo({ id, completed: !completed });
@@ -25,16 +44,39 @@ class TodoItem extends React.PureComponent {
     this.props.editTodo({ id, caption: e });
   };
 
+  startTimer = () => {
+    this.props.startTimer(this.props.item.id);
+  };
+
+  endTimer = () => {
+    this.props.endTimer();
+  };
+
   renderEditing = () => {
     const { editing, item } = this.props;
     return editing === item.id ? (
       <Modal onClose={this.toggleEdit}>
         <TextInput text={item.caption} onChange={this.onChange} />
-        <div>notifications</div>
-        <div>timer</div>
+        <div>
+          <TimersHistory item={item} />
+        </div>
       </Modal>
     ) : null;
   };
+
+  renderTimerButton = () => {
+    if (this.props.item.completed) return null;
+    const { activeTimer } = this.props;
+    const btn = activeTimer ? "end" : "start";
+    const btnProps = this.btnProperties[btn];
+    const onClick = activeTimer ? this.endTimer : this.startTimer;
+    return (
+      <button {...btnProps} onClick={onClick}>
+        <img src={timer} alt="timer" />
+      </button>
+    );
+  };
+
   render() {
     return (
       <>
@@ -49,6 +91,7 @@ class TodoItem extends React.PureComponent {
             <div className="todo-caption">{this.props.item.caption}</div>
           </div>
           <div className="button-container">
+            {this.renderTimerButton()}
             <button
               className="edit-btn"
               title="Edit item"
@@ -73,9 +116,14 @@ class TodoItem extends React.PureComponent {
   }
 }
 
-const mapStateToProps = state => ({ editing: state.editing });
+const mapStateToProps = (state, ownProps) => {
+  const activeTimer = state.timers.active
+    ? state.timers.active.todoId === ownProps.item.id
+    : false;
+  return { editing: state.editing, activeTimer };
+};
 
 export default connect(
   mapStateToProps,
-  { removeTodo, startEditing, editTodo }
+  { removeTodo, startEditing, editTodo, startTimer, endTimer }
 )(TodoItem);

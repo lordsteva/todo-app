@@ -12,3 +12,4 @@ const firebaseConfig = {
 
 export const firestore = firebase.initializeApp(firebaseConfig).firestore();
 export const todosCollection = firestore.collection("todos");
+export const timersCollection = firestore.collection("timers");

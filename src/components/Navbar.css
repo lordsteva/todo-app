@@ -1,0 +1,14 @@
+.navbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  background-color: darkslateblue;
+  position: sticky;
+  min-height: 12vh;
+  top: 0;
+  font-size: 1.4em;
+}
+
+.logo {
+  margin: 10px;
+}

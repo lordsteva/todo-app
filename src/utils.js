@@ -1,7 +1,8 @@
 import firebase from "firebase";
-import { firestore, todosCollection } from "./firestore";
+import { firestore, todosCollection, timersCollection } from "./firestore";
+import debounce from "lodash.debounce";
 
-export const loadData = async () => {
+const loadData = async () => {
   const todosRef = await todosCollection.orderBy("created").get();
   return todosRef.docs.map(doc => {
     const data = doc.data();
@@ -9,33 +10,82 @@ export const loadData = async () => {
   });
 };
 
-export const removeTodo = async id => {
+const removeTodo = async id => {
+  await _removeTimers(id);
   return await todosCollection.doc(id).delete();
 };
 
-export const addTodo = async caption => {
+const addTodo = async caption => {
   const todo = {
     created: firebase.firestore.Timestamp.fromDate(new Date()),
     caption,
     completed: false
   };
-  const docRef = await todosCollection.add(todo);
-  todo.id = docRef.id;
+  const todoRef = await todosCollection.add(todo);
+  todo.id = todoRef.id;
   return todo;
 };
 
-export const editTodo = async edited => {
+const editTodo = debounce(async edited => {
   let data = { ...edited };
   delete data.id;
   return await todosCollection.doc(edited.id).update(data);
-};
+}, 200);
 
-export const removeCompletedTodos = async () => {
+const removeCompletedTodos = async () => {
   const todosRef = await todosCollection.get();
   const batch = firestore.batch();
-
+  const removed = {};
   todosRef.docs.forEach(doc => {
-    if (doc.data()["completed"]) batch.delete(doc.ref);
+    if (doc.data()["completed"]) {
+      batch.delete(doc.ref);
+      removed[doc.id] = doc.id;
+    }
+  });
+  await batch.commit();
+  return removed;
+};
+
+const startTimer = async todoId => {
+  const todoRef = todosCollection.doc(todoId);
+  const startTime = firebase.firestore.Timestamp.fromDate(new Date());
+  const timer = {
+    startTime,
+    todoRef
+  };
+  const timerRef = await timersCollection.add(timer);
+  return { id: timerRef.id, todoId, startTime };
+};
+
+export const endTimer = async timerId => {
+  const endTime = firebase.firestore.Timestamp.fromDate(new Date());
+  const timerRef = timersCollection.doc(timerId);
+  await timerRef.update({ endTime });
+  return endTime;
+};
+
+export const fetchTimers = async () => {
+  const timersRef = await timersCollection.orderBy("startTime").get();
+  return timersRef.docs.map(timer => {
+    const data = timer.data();
+    return {
+      id: timer.id,
+      todoId: data.todoRef.id,
+      startTime: data.startTime,
+      endTime: data.endTime
+    };
+  });
+};
+
+const _removeTimers = async todoId => {
+  const todoRef = todosCollection.doc(todoId);
+  const timersRef = await timersCollection
+    .where("todoRef", "==", todoRef)
+    .get();
+  const batch = firestore.batch();
+
+  timersRef.docs.forEach(doc => {
+    batch.delete(doc.ref);
   });
   return await batch.commit();
 };
@@ -51,5 +101,8 @@ export default {
   addTodo,
   removeTodo,
   editTodo,
-  removeCompletedTodos
+  removeCompletedTodos,
+  startTimer,
+  endTimer,
+  fetchTimers
 };
