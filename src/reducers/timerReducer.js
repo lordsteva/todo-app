@@ -28,6 +28,10 @@ const timerReducer = (timers = { active: null, all: [] }, action) => {
     case types.REMOVE_COMPLETED_TODOS:
       const filteredTimers = timers.all.filter(timer => !payload[timer.todoId]);
       return { ...timers, all: filteredTimers };
+    case types.UPDATE_TIMER:
+      const active = timers.active;
+      active.elapsedTime = payload;
+      return { ...timers, active };
     default:
       return timers;
   }
@@ -38,6 +42,7 @@ const _convertActiveTimer = timer =>
     ? {
         todoId: timer.todoId,
         id: timer.id,
+        elapsedTime: 0,
         started: timer.startTime.toDate().getTime()
       }
     : null;

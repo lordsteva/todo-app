@@ -1,5 +1,6 @@
 import database from "../utils";
 import types from "./actionTypes";
+import { startTimer, endTimer, fetchTimers } from "./TimerActions";
 
 export const fetchTodos = () => async dispatch => {
   const todos = await database.loadData();
@@ -41,20 +42,4 @@ export const removeCompletedTodos = () => async dispatch => {
   dispatch({ type: types.REMOVE_COMPLETED_TODOS, payload: removed });
 };
 
-export const startTimer = todoId => async (dispatch, getState) => {
-  const state = getState();
-  if (state.timers.active) endTimer(state.timers.active)(dispatch, getState);
-  const timer = await database.startTimer(todoId);
-  dispatch({ type: types.START_TIMER, payload: timer });
-};
-
-export const endTimer = () => async (dispatch, getState) => {
-  const state = getState();
-  const endTime = await database.endTimer(state.timers.active.id);
-  dispatch({ type: types.END_TIMER, payload: endTime });
-};
-
-export const fetchTimers = () => async dispatch => {
-  const timers = await database.fetchTimers();
-  dispatch({ type: types.FETCH_TIMERS, payload: timers });
-};
+export { fetchTimers, startTimer, endTimer };

@@ -30,7 +30,6 @@ class Timer extends React.Component {
 
   render() {
     if (this.props.activeTimer) return this.renderActiveTimer();
-    clearTimeout(this.timeout);
     return (
       <div className="timer">
         <div className="no-active">No active timer</div>

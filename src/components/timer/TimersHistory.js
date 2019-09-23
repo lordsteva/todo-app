@@ -5,7 +5,6 @@ import TimerDisplay from "./TimerDisplay";
 import "./TimersHistory.css";
 
 class TimersHistory extends React.PureComponent {
-  timeout = null;
   renderTable(timers, total) {
     return (
       <table border="solid black 1px">
@@ -20,15 +19,11 @@ class TimersHistory extends React.PureComponent {
         <tfoot>
           <tr>
             <th colSpan="2">Total time:</th>
-            <td>{getTimeString(0, total)}</td>
+            <td>{getTimeString(total * 1000)}</td>
           </tr>
         </tfoot>
       </table>
     );
-  }
-
-  componentWillUnmount() {
-    clearTimeout(this.timeout);
   }
 
   render() {
@@ -37,19 +32,16 @@ class TimersHistory extends React.PureComponent {
       const startDate = new Date(item.startTime.toDate());
       const endDate = item.endTime ? new Date(item.endTime.toDate()) : null;
       if (endDate) {
-        total += endDate.getTime() - startDate.getTime();
+        total += Math.floor((endDate.getTime() - startDate.getTime()) / 1000);
       } else {
-        total += new Date().getTime() - startDate.getTime();
-        this.timeout = setTimeout(() => {
-          this.forceUpdate();
-        }, 1000);
+        total += Math.floor(this.props.activeTimer / 1000);
       }
       return (
         <tr key={item.id}>
           <td>{startDate.toLocaleString()}</td>
           <td>{endDate ? endDate.toLocaleString() : null}</td>
           <td>
-            {endDate ? getTimeString(startDate, endDate) : <TimerDisplay />}
+            {endDate ? getTimeString(endDate - startDate) : <TimerDisplay />}
           </td>
         </tr>
       );
@@ -66,6 +58,7 @@ class TimersHistory extends React.PureComponent {
 
 const mapStateToProps = (state, ownProps) => {
   return {
+    activeTimer: state.timers.active && state.timers.active.elapsedTime,
     history: state.timers.all.filter(item => item.todoId === ownProps.item.id)
   };
 };

@@ -5,3 +5,9 @@ table {
 th {
   background-color: lightgray;
 }
+
+td {
+  padding: 2px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}

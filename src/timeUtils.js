@@ -1,5 +1,4 @@
-export const getTimeString = (start, end) => {
-  let msec = end - start;
+export const getTimeString = msec => {
   let hh = Math.floor(msec / 1000 / 60 / 60);
   msec -= hh * 1000 * 60 * 60;
   let mm = Math.floor(msec / 1000 / 60);
